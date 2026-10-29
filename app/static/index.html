@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light"><title>NEXUS — Commerce Operations</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/app.css">
+<script defer src="/static/app.js"></script>
+</head><body>
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/" data-route="overview" aria-label="NEXUS ホーム"><span class="brand-glyph">✦</span><span><strong>NEXUS</strong><small>COMMERCE OS</small></span></a>
+    <div class="workspace"><div class="workspace-icon">N</div><div><b>My workspace</b><small>Personal operations</small></div><span class="workspace-chevron">⌄</span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="main-nav" aria-label="メインナビゲーション">
+      <a href="/" data-route="overview" class="nav-link active"><span data-icon="dashboard"></span><span>Overview</span></a>
+      <a href="/tasks" data-route="tasks" class="nav-link"><span data-icon="layers"></span><span>Tasks</span><span class="nav-pill" id="navTaskCount">0</span></a>
+      <a href="/sites" data-route="sites" class="nav-link"><span data-icon="globe"></span><span>Stores</span></a>
+      <a href="/profiles" data-route="profiles" class="nav-link"><span data-icon="users"></span><span>Profiles</span></a>
+      <a href="/logs" data-route="logs" class="nav-link"><span data-icon="terminal"></span><span>Activity log</span></a>
+    </nav>
+    <div class="nav-label secondary-label">SYSTEM</div>
+    <nav class="main-nav"><a href="/settings" data-route="settings" class="nav-link"><span data-icon="settings"></span><span>Settings</span></a></nav>
+    <div class="sidebar-space"></div>
+    <div class="sidebar-bottom">
+      <div class="connection-card"><div class="connection-head"><span class="pulse-dot"></span><b id="connectionTitle">ローカル接続</b></div><p id="connectionText">バックエンドへ接続しています</p><span class="connection-sub"><span id="runnerLabel">0 processes</span><span>API v0.2</span></span></div>
+      <div class="account"><span class="avatar">NX</span><span><b>Local operator</b><small>Administrator · Local only</small></span><span data-icon="chevron-right"></span></div>
+    </div>
+  </aside>
+  <div class="main-shell">
+    <header class="topbar"><div class="crumb"><button class="mobile-menu icon-btn" id="menuButton" aria-label="メニューを開く"><span data-icon="menu"></span></button><span class="crumb-dim">Workspace</span><span class="slash">/</span><span id="crumbName">Overview</span></div><div class="topbar-right"><button class="search-trigger" id="commandButton"><span data-icon="search"></span><span>Search anything...</span><kbd>Ctrl K</kbd></button><span class="live-indicator" id="modePill">CONNECTING</span><button class="icon-btn" id="themeButton" aria-label="テーマ切替"><span data-icon="moon"></span></button><div class="top-avatar">NX</div></div></header>
+    <main id="content"><div class="loading-shell"><div class="skeleton hero-skeleton"></div><div class="skeleton card-skeleton"></div><div class="skeleton card-skeleton"></div></div></main>
+    <footer class="footer"><span>NEXUS <span class="muted">/</span> commerce operations</span><span id="updatedAt">Synchronizing...</span></footer>
+  </div>
+</div>
+<div id="modalRoot"></div><div id="drawerRoot"></div><div id="toastRoot" aria-live="polite"></div>
+<div id="paletteRoot"></div>
+</body></html>
