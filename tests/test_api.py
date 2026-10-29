@@ -86,3 +86,23 @@ async def test_live_without_adapter_is_rejected(client,monkeypatch):
     r=await client.post(f'/api/tasks/{tid}/start',headers=HEAD)
     assert r.status_code==409
     assert not runner.is_running(tid)
+
+@pytest.mark.anyio
+async def test_busy_site_does_not_starve_other_sites(monkeypatch):
+    """1サイトに多数のタスクがあっても、他サイトのチェックが待たされない。"""
+    import asyncio, time
+    from app import runner as runner_mod
+    from app.adapters import CheckResult
+    done={}
+    async def fake(task):
+        done.setdefault(task['site_key'],time.monotonic()-t0)
+        return CheckResult(False,'')
+    monkeypatch.setattr(runner_mod,'get_adapter',lambda key:fake)
+    r=runner_mod.Runner()
+    t0=time.monotonic()
+    busy=[asyncio.create_task(r._check_site({'site_key':'geo'},0.5)) for _ in range(6)]
+    await asyncio.sleep(0.05)  # geo側が先に並んだ状態を作る
+    await r._check_site({'site_key':'joshin'},0.5)
+    assert done['joshin']<0.3
+    for t in busy:t.cancel()
+    await asyncio.gather(*busy,return_exceptions=True)

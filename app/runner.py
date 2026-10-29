@@ -61,12 +61,14 @@ class Runner:
     async def _check_site(self,task,interval):
         key=task['site_key']
         lock=self.site_locks.setdefault(key,asyncio.Lock())
-        async with self.global_slots:
-            async with lock:
-                elapsed=time.monotonic()-self.last_check.get(key,0)
-                # Conservative aggregate site pacing even with many tasks.
-                remaining=max(0,min(interval,60)-elapsed)
-                if remaining:await asyncio.sleep(remaining)
+        # サイト単位の待ち（ロック・間隔調整）を先に済ませ、全体枠は実際のチェック中だけ握る。
+        # 逆順だと、1サイトに多数のタスクがあるとき全体枠を待機で使い切り、他サイトが止まる。
+        async with lock:
+            elapsed=time.monotonic()-self.last_check.get(key,0)
+            # Conservative aggregate site pacing even with many tasks.
+            remaining=max(0,min(interval,60)-elapsed)
+            if remaining:await asyncio.sleep(remaining)
+            async with self.global_slots:
                 self.last_check[key]=time.monotonic()
                 return await get_adapter(key)(task)
 
